@@ -13,7 +13,7 @@ class usuarios extends MY_Controller {
 		
 		if($this->mostrar_session('nivel') == 0)
 		{
-			$config['where'] = array('estado' => 1);
+			$config['where'] = array('estado' => 1, 'nivel >=' => 1);
 			$items['nivel'] = array('type' => 'select', 'text' => array('espanol' => 'Nivel'), 'items' => array(1 => 'Usuario Administrador', 2 => 'Usuario'), 'required' => TRUE);
 		}
 		
@@ -21,12 +21,6 @@ class usuarios extends MY_Controller {
 		{
 			$config['where'] = array('estado' => 1, 'nivel' => 2);
 			$items['nivel'] = array('type' => 'hidden', 'value' => 2, 'text' => array('espanol' => 'Nivel'));
-		}
-
-		if($this->mostrar_session('nivel') == 3 || $this->mostrar_session('nivel') == 4)
-		{
-			$config['where'] = array('estado' => 1, 'nivel' => 4);
-			$items['nivel'] = array('type' => 'hidden', 'value' => 4, 'text' => array('espanol' => 'Nivel'));
 		}
 
 		$config['table'] = 'administrador';
@@ -68,20 +62,8 @@ class usuarios extends MY_Controller {
 		$buttons['eliminar'] = array('type' => 'delete', 'text' => array('espanol' => 'Eliminar un Permiso'));
 		// Fin de los Botones
 
-		if($this->mostrar_session('nivel') == 1 || $this->mostrar_session('nivel') == 2)
-		{
-			$elementos = $this->module_model->seleccionar('backend_menu', array('estado' => 1));
-		}
-
-		if($this->mostrar_session('nivel') == 3 || $this->mostrar_session('nivel') == 4)
-		{
-			$elementos = array('transparencia' => 'transparencia');
-		}
-
-		if($this->mostrar_session('nivel') == 0)
-		{
-			$elementos = array_merge($this->module_model->seleccionar('backend_menu', array('estado' => 1)), array('transparencia' => 'transparencia'));
-		}
+		// Elementos
+		$elementos = $this->module_model->seleccionar('backend_menu', array('estado' => 1));
 
 		// Elementos
 		$items['controlador'] = array('type' => 'select', 'text' => array('espanol' => 'Seleccione el Item de Permiso'), 'items' => $elementos, 'value' => array('key' => 'url', 'item' => 'url', 'table' => 'backend_menu'), 'required' => TRUE, 'table' => TRUE, 'function' => array('event' => 'cargar_datos', 'children' => 'items'));

@@ -22,20 +22,7 @@ class permisos extends MY_Controller {
 		// Fin de los Botones
 
 		// Elementos
-		if($this->mostrar_session('nivel') == 1 || $this->mostrar_session('nivel') == 2)
-		{
-			$elementos = $this->module_model->seleccionar('backend_menu', array('estado' => 1));
-		}
-
-		if($this->mostrar_session('nivel') == 3 || $this->mostrar_session('nivel') == 4)
-		{
-			$elementos = array('transparencia' => 'transparencia');
-		}
-
-		if($this->mostrar_session('nivel') == 0)
-		{
-			$elementos = array_merge($this->module_model->seleccionar('backend_menu', array('estado' => 1)), array('transparencia' => 'transparencia'));
-		}
+		$elementos = $this->module_model->seleccionar('backend_menu', array('estado' => 1));
 
 		$items['controlador'] = array('type' => 'select', 'text' => array('espanol' => 'Seleccione el Item de Permiso'), 'items' => $elementos, 'value' => array('key' => 'url', 'item' => 'url', 'table' => 'backend_menu'), 'required' => TRUE, 'table' => TRUE, 'function' => array('event' => 'cargar_datos', 'children' => 'items'));
 		$items['items'] = array('type' => 'multiple_select', 'text' => array('espanol' => 'Seleccione el Sub Item de Permiso'), 'items' => array(), 'help' => 'Si no se selecciona un registro en específico, se asumirá como todo el ítem.', 'value' => array('key' => 'id', 'item' => 'titulo'));
