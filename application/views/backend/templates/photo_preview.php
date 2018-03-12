@@ -1,0 +1,1 @@
+<script type="text/javascript"> window.parent.return_name_photo('<?php echo $imagen; ?>'); </script>

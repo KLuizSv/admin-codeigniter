@@ -1,0 +1,1 @@
+<script type="text/javascript"> redireccionar("<?php echo $url; ?>");</script>

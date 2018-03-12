@@ -1,0 +1,9 @@
+RewriteEngine on
+
+#RewriteCond %{HTTP_HOST} ^inmp.gob.pe [NC]
+#RewriteRule ^(.*)$ http://www.inmp.gob.pe/$1 [L,R=301]
+
+RewriteRule ^([A-Za-z0-9-_.]+)/?$ index.php/$1 [L]
+RewriteRule ^([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)/?$ index.php/$1/$2 [L]
+RewriteRule ^([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)/([A-Za-z0-9-_]+)/?$ index.php/$1/$2/$3 [L]
+RewriteRule ^([A-Za-z0-9-_.]+)/([A-Za-z0-9-_]+)/([A-Za-z0-9-_]+)/([A-Za-z0-9-_]+)/?$ index.php/$1/$2/$3/$4 [L]

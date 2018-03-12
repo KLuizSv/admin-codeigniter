@@ -1,0 +1,1 @@
+<script type="text/javascript"> window.parent.imprimir(<?php echo json_encode($data); ?>);</script>
