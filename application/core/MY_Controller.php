@@ -1298,6 +1298,7 @@ class MY_Controller extends CI_Controller {
 
 	protected function renderizar($data = array(), $retorno = FALSE)
 	{
+		$data['controller'] = $this->controller;
 		$data['parent_key'] = $this->parent_key;
 		$data['chat'] = $this->chat;
 		$data['usuarios'] = $this->usuarios;
