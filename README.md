@@ -1,6 +1,7 @@
 # Admin Codegniter
 Gestor de Contenidos
 
+# Configuración inicial
 Para poder configurar correctamente este repositorio necesitaras ejecutar el SQL que está en la raíz, luego de importarlo. Tendrás que modificar el archivo application/config/database.php
 
 ```
@@ -30,4 +31,19 @@ Luego tendrás que editar el archivo application/config/config.php
 ...
 $config['base_url']	= 'http://localhost/admin-codeigniter/'; // Aquí vas a cambiar la ruta que manejas, ya sea localmente o cuando pases a producción.
 ...
+```
+
+# Configuración de los Enlaces para el backend.
+
+Para poder generar los módulos y rutas de edición para el backend se usará un archivo de idioma. El archivo se encuentra en: application/language/espanol/application_lang.php
+
+Ahí se incluirá el siguiente texto por cada enlace agregado en el módulo de menú.
+
+```
+<?php
+
+$lang['usuarios'] = "Usuarios"; // usuarios es la ruta que se generó en el menú principal y el texto que se visualizará es "Usuarios"
+
+/* End of file application_lang.php */
+/* Location: ./application/language/espanol/application_lang.php */
 ```
