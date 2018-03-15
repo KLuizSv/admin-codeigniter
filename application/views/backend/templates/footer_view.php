@@ -1,50 +1,6 @@
     </section>
 </section>
 
-<div class="right-sidebar">
-    <?php $this->load->view("backend/templates/normatividad_view"); ?>
-</div>
-
-<?php if(isset($chat) && $chat == TRUE): ?>
-<div class="right-chat-sidebar">
-
-<div class="right-stat-bar">
-<ul class="right-side-accordion">
-    <li class="widget-collapsible">
-        <a href="#" class="head widget-head terques-bg active clearfix">
-            <span class="pull-left">Usuarios Conectados</span>
-            <span class="pull-right widget-collapse"><i class="ico-minus"></i></span>
-        </a>
-        <ul class="widget-container">
-            <li>
-                <?php foreach($usuarios as $key => $value): ?>
-                <div class="prog-row" id="<?php echo $value['id']; ?>" onclick="javascript:abrir_chat('chat', '<?php echo $value['id']; ?>');">
-                    <div class="user-thumb">
-                        <a href="javascript:;"><img src="<?php echo base_url(); ?>uploads/33x33/<?php echo $value['imagen']; ?>" alt=""></a>
-                    </div>
-                    <div class="user-details">
-                        <h4><a class="tooltips" data-title="<?php echo $value['nombres'] . ' ' . $value['apellidos']; ?>" href="javascript:;" onclick="javascript:abrir('profile', '<?php echo $value['id']; ?>');"><?php echo $value['nombres'] . ' ' . $value['apellidos']; ?></a></h4>
-                        <p>
-                            <?php echo ($value['userlist'] == 1) ? 'Disponible' : 'Desconectado'; ?>
-                        </p>
-                    </div>
-                    <div class="user-status text-danger">
-                        <i class="fa fa-comments-o"></i>
-                    </div>
-                </div>
-                <?php endforeach; ?>
-                <p class="text-center">
-                    <a href="javascript:;" class="view-btn">Ver Todos los Mensajes</a>
-                </p>
-            </li>
-        </ul>
-    </li>
-</ul>
-</div>
-
-</div>
-<?php endif; ?>
-
 </section>
 <script type="text/javascript">
     var current_url = "<?php echo current_url(); ?>/"; var base_url = "<?php echo base_url(); ?>"; var backend_url = "<?php echo backend_url(); ?>"; var backend_view = "<?php echo backend_view(); ?>"; var base_view = "<?php echo base_view(); ?>"; var xnToken = "<?php echo MY_Controller::mostrar_session('token'); ?>"; var xnUserId = "<?php echo MY_Controller::mostrar_session('id'); ?>"; var xnUserName = "<?php echo MY_Controller::mostrar_session('nombres') . " " . MY_Controller::mostrar_session('apellidos'); ?>"; var xnChannel = "<?php echo $this->encrypt->sha1('iep'); ?>";
