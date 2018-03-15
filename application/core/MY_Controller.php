@@ -188,9 +188,9 @@ class MY_Controller extends CI_Controller {
 		}
 		else
 		{
-			$_ignore[] = 'agregar';
+			$_ignore = ['agregar'];
 
-			if(isset($_POST) AND count($_POST) > 0)
+			if(isset($_POST) AND count($_POST) > 0 AND strpos(current_url(), '/backend/') !== FALSE)
 			{
 				$agregado = TRUE; $historial = (array) $this->mostrar_session('historial');
 				$current_url = str_replace(backend_url(), '', current_url()); $ignorado = FALSE;
@@ -231,7 +231,14 @@ class MY_Controller extends CI_Controller {
 
 				if(count($historial) > 0)
 				{
-					$this->url_retorno = $historial[(count($historial) - 1)];
+					if($ignorado == TRUE)
+					{
+						$this->url_retorno = $historial[(count($historial) - 2)];
+					}
+					else
+					{
+						$this->url_retorno = $historial[(count($historial) - 1)];
+					}
 				}
 			}
 		}
