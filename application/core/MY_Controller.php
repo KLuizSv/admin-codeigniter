@@ -135,7 +135,7 @@ class MY_Controller extends CI_Controller {
 
 		$_ignore = ['eliminar', 'publicar', 'action_update', 'import', 'export', 'regresar', 'ordenar_masivo', 'despublicar_masivo', 'publicar_masivo', 'eliminar_masivo'];
 
-		if($this->input->is_ajax_request() === TRUE AND $this->mostrar_session('nivel') != NULL)
+		if($this->input->is_ajax_request() === TRUE AND strpos(current_url(), '/backend/') !== FALSE)
 		{
 			$agregado = TRUE; $historial = (array) $this->mostrar_session('historial');
 			$current_url = str_replace(backend_url(), '', current_url()); $ignorado = FALSE;
@@ -186,51 +186,53 @@ class MY_Controller extends CI_Controller {
 				}
 			}
 		}
-
-		$_ignore[] = ['agregar', 'actualizar'];
-
-		if(isset($_POST) AND count($_POST) > 0 AND $this->input->is_ajax_request() !== TRUE)
+		else
 		{
-			$agregado = TRUE; $historial = (array) $this->mostrar_session('historial');
-			$current_url = str_replace(backend_url(), '', current_url()); $ignorado = FALSE;
+			$_ignore[] = 'agregar';
 
-			foreach($_ignore as $key => $value)
+			if(isset($_POST) AND count($_POST) > 0)
 			{
-				if(strpos($current_url, $value) !== FALSE AND $agregado == TRUE)
+				$agregado = TRUE; $historial = (array) $this->mostrar_session('historial');
+				$current_url = str_replace(backend_url(), '', current_url()); $ignorado = FALSE;
+
+				foreach($_ignore as $key => $value)
 				{
-					$agregado = FALSE; $ignorado = TRUE;
-				}
-			}
-
-			if($ignorado == FALSE)
-			{
-				$_historial = [];
-
-				foreach($historial as $key => $value)
-				{
-					if($current_url == $value)
+					if(strpos($current_url, $value) !== FALSE AND $agregado == TRUE)
 					{
-						$_historial[] = $value; $agregado = FALSE;
-					}
-
-					elseif($current_url != $value AND $agregado == TRUE)
-					{
-						$_historial[] = $value;
+						$agregado = FALSE; $ignorado = TRUE;
 					}
 				}
 
-				$historial = $_historial; $this->cargar_session('historial', $historial);
-			}
+				if($ignorado == FALSE)
+				{
+					$_historial = [];
 
-			if($agregado == TRUE)
-			{
-				$historial[] = $current_url;
-				$this->cargar_session('historial', $historial);
-			}
+					foreach($historial as $key => $value)
+					{
+						if($current_url == $value)
+						{
+							$_historial[] = $value; $agregado = FALSE;
+						}
 
-			if(count($historial) > 0)
-			{
-				$this->url_retorno = $historial[(count($historial) - 1)];
+						elseif($current_url != $value AND $agregado == TRUE)
+						{
+							$_historial[] = $value;
+						}
+					}
+
+					$historial = $_historial; $this->cargar_session('historial', $historial);
+				}
+
+				if($agregado == TRUE)
+				{
+					$historial[] = $current_url;
+					$this->cargar_session('historial', $historial);
+				}
+
+				if(count($historial) > 0)
+				{
+					$this->url_retorno = $historial[(count($historial) - 1)];
+				}
 			}
 		}
 
