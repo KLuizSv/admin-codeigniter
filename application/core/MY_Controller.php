@@ -133,7 +133,7 @@ class MY_Controller extends CI_Controller {
 			$this->clear_data(); // Limpiamos la Información..
 		}
 
-		$_ignore = ['eliminar', 'publicar', 'action_update', 'import', 'export', 'regresar', 'ordenar_masivo', 'despublicar_masivo', 'publicar_masivo', 'eliminar_masivo'];
+		$_ignore = ['eliminar', 'publicar', 'action_update', 'import', 'export', 'regresar', 'ordenar_masivo', 'despublicar_masivo', 'publicar_masivo', 'eliminar_masivo', 'actualizar_tree'];
 
 		if($this->input->is_ajax_request() === TRUE AND strpos(current_url(), '/backend/') !== FALSE)
 		{
