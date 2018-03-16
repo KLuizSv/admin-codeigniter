@@ -232,39 +232,8 @@ class dashboard extends MY_Controller {
 
 		$config['buttons'] = $buttons;
 
-		$this->initialize($config); // Inicializando valores..
-
-
-		if(isset($_POST) && count($_POST) > 0)
-		{
-			// Enviar Parámetros de Configuración..
-			$busqueda = $this->module_model->seleccionar('configuracion', array(), 1, 1);
-			$update = $this->post_form($busqueda);
-
-			$data['url'] = NULL; $data['mensaje'] = $this->module_model->actualizar('configuracion', $update, 1);
-			
-			$this->load->view("backend/templates/print_json_view", array('data' => $data));
-		}
-		else
-		{
-			$this->actualizar(1);
-		}
-	}
-
-	function regresar()
-	{
-		$historial = (array) $this->mostrar_session('historial');
-
-		if(count($historial) > 1)
-		{
-			$resultado['url'] = $historial[(count($historial) - 2)];
-		}
-		else
-		{
-			$resultado['url'] = NULL;
-		}
-
-		$this->load->view("backend/templates/json_view", array('resultado' => $resultado));
+		$this->initialize($config);
+		$this->actualizar(1);
 	}
 }
 

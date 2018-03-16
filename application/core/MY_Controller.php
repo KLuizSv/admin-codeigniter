@@ -267,9 +267,22 @@ class MY_Controller extends CI_Controller {
 		{
 			$this->module_model->guardar('log_administrador', array('id' => '', 'ip' => $this->input->ip_address(), 'accion' => $_SERVER['REQUEST_METHOD'], 'ruta' => current_url(), 'usuario' => self::mostrar_session('id'), 'fecha' => $this->fecha()));
 		}
+	}
 
-		//print_r($_SESSION[$this->session_name]['miga_pan']); die;
-		// Final del archivo de Logs..
+	function regresar()
+	{
+		$historial = (array) $this->mostrar_session('historial');
+
+		if(count($historial) > 1)
+		{
+			$resultado['url'] = $historial[(count($historial) - 2)];
+		}
+		else
+		{
+			$resultado['url'] = NULL;
+		}
+
+		$this->load->view("backend/templates/json_view", array('resultado' => $resultado));
 	}
 
 	function validar_recaptcha()
