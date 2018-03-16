@@ -122,7 +122,7 @@ class MY_Controller extends CI_Controller {
 
 		// $this->descargar_session('historial');
 
-		if($this->input->is_ajax_request() !== TRUE AND strpos(current_url(), '/backend/') !== FALSE)
+		if($this->input->is_ajax_request() !== TRUE AND strpos(current_url(), '/backend') !== FALSE)
 		{
 			$this->configuracion = $this->module_model->seleccionar('configuracion', array(), 1, 1);
 
