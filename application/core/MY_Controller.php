@@ -122,10 +122,10 @@ class MY_Controller extends CI_Controller {
 
 		// $this->descargar_session('historial');
 
+		$this->configuracion = $this->module_model->seleccionar('configuracion', array(), 1, 1);
+
 		if($this->input->is_ajax_request() !== TRUE AND strpos(current_url(), '/backend') !== FALSE)
 		{
-			$this->configuracion = $this->module_model->seleccionar('configuracion', array(), 1, 1);
-
 			$config['item_order'] = array('key' => 'orden', 'value' => 'ASC');
 			$this->initialize($config);
 			$this->menu = $this->module_model->seleccionar('backend_menu', array('estado' => 1)); $grupo = array();
