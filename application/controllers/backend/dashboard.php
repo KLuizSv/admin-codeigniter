@@ -107,9 +107,9 @@ class dashboard extends MY_Controller {
 		$this->validar_usuario(); // Verificando la sesión del usuario..
 
 		// Items para el Perfil..
-		$items['correo_electronico'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese su correo electrónico', 'required' => array('valid_email'), 'session' => TRUE);
-		$items['nombres'] = array('type' => 'text', 'text' => array('espanol' => 'Nombres', 'english' => 'Name'), 'placeholder' => 'Ingrese sus nombres', 'required' => TRUE, 'session' => TRUE);
-		$items['apellidos'] = array('type' => 'text', 'text' => array('espanol' => 'Apellidos', 'english' => 'Last Name'), 'placeholder' => 'Ingrese sus apellidos', 'required' => TRUE, 'session' => TRUE);
+		$items['correo_electronico'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese su correo electrónico', 'validate' => 'required|valid_email', 'session' => TRUE);
+		$items['nombres'] = array('type' => 'text', 'text' => array('espanol' => 'Nombres', 'english' => 'Name'), 'placeholder' => 'Ingrese sus nombres', 'validate' => 'required', 'session' => TRUE);
+		$items['apellidos'] = array('type' => 'text', 'text' => array('espanol' => 'Apellidos', 'english' => 'Last Name'), 'placeholder' => 'Ingrese sus apellidos', 'validate' => 'required', 'session' => TRUE);
 		$items['imagen'] = array('type' => 'photo', 'text' => array('espanol' => 'Imagen', 'english' => 'Photo'), 'sizes' => array('33x33'), 'session' => TRUE);
 		$items['acerca_de'] = array('type' => 'textarea', 'text' => array('espanol' => 'Información Adicional', 'english' => 'Information Aditional'), 'placeholder' => 'Ingrese una información adicional', 'session' => TRUE);
 		// Fin de los Items para el Perfil..
@@ -134,9 +134,9 @@ class dashboard extends MY_Controller {
 		$this->validar_usuario(); // Verificando la sesión del usuario..
 
 		// Items para el Perfil..
-		$items['contrasenia_anterior'] = array('type' => 'password', 'text' => array('espanol' => 'Contraseña Anterior', 'english' => 'Old Password'), 'placeholder' => 'Ingrese su contraseña anterior', 'required' => TRUE);
-		$items['nueva_contrasenia'] = array('type' => 'password', 'text' => array('espanol' => 'Nueva Contraseña', 'english' => 'New Password'), 'placeholder' => 'Ingrese su nueva contraseña' , 'required' => TRUE);
-		$items['repetir_contrasenia'] = array('type' => 'password', 'text' => array('espanol' => 'Repetir Contraseña', 'english' => 'Repeat Password'), 'placeholder' => 'Repita su nueva contraseña', 'required' => TRUE);
+		$items['contrasenia_anterior'] = array('type' => 'password', 'text' => array('espanol' => 'Contraseña Anterior', 'english' => 'Old Password'), 'placeholder' => 'Ingrese su contraseña anterior', 'validate' => 'required');
+		$items['nueva_contrasenia'] = array('type' => 'password', 'text' => array('espanol' => 'Nueva Contraseña', 'english' => 'New Password'), 'placeholder' => 'Ingrese su nueva contraseña' , 'validate' => 'required');
+		$items['repetir_contrasenia'] = array('type' => 'password', 'text' => array('espanol' => 'Repetir Contraseña', 'english' => 'Repeat Password'), 'placeholder' => 'Repita su nueva contraseña', 'validate' => 'required');
 		// Fin de los Items para el Perfil..
 
 		$config['table'] = 'administrador';
@@ -192,34 +192,19 @@ class dashboard extends MY_Controller {
 	{
 		$this->validar_usuario(); // Verificando la sesión del usuario..
 
-		/*
-		if($this->mostrar_session('nivel') == 0)
-		{
-			$items['archivo_transparencia'] = array('type' => 'file', 'text' => array('espanol' => 'Cargar Transparencia'), 'required' => TRUE);
-			$items['documento_archivo_transparencia'] = array('type' => 'file', 'text' => array('espanol' => 'Cargar Documentos Transparencia'), 'required' => TRUE);
-		}
-		*/
+		$items['titulo'] = array('type' => 'text', 'text' => array('espanol' => 'Título', 'english' => 'Title'), 'placeholder' => 'Ingrese el título de la empresa', 'validate' => 'required');
+		$items['logo'] = array('type' => 'photo', 'text' => array('espanol' => 'Logo (200x80 píxeles)'), 'sizes' => array(), 'original' => TRUE);
+		$items['keywords'] = array('type' => 'textarea', 'text' => array('espanol' => 'Palabras Claves', 'english' => 'Keywords'), 'placeholder' => 'Ingrese las palabras claves de su empresa');
+		$items['description'] = array('type' => 'textarea', 'text' => array('espanol' => 'Descripción', 'english' => 'Description'), 'placeholder' => 'Ingrese la descripción de su empresa');
+		$items['email_contacto'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese el correo corporativo de su empresa');
+		$items['posicionamiento_seguimiento'] = array('type' => 'label', 'text' => array('espanol' => 'Posicionamiento y Seguimiento'));
+		$items['google_analytics'] = array('type' => 'textarea', 'text' => array('espanol' => 'Código de Seguimiento - Google Analytics'));
 
-		if($this->mostrar_session('nivel') == 0 || $this->mostrar_session('nivel') == 1)
-		{
-			// Configuracion..
-			$items['titulo'] = array('type' => 'text', 'text' => array('espanol' => 'Título', 'english' => 'Title'), 'placeholder' => 'Ingrese el título de la empresa', 'required' => TRUE);
-			// $items['subtitulo'] = array('type' => 'text', 'text' => array('espanol' => 'Subtítulo', 'english' => 'Title'), 'placeholder' => 'Ingrese el título de la empresa', 'required' => TRUE);
-			$items['logo'] = array('type' => 'photo', 'text' => array('espanol' => 'Logo (200x80 píxeles)'), 'sizes' => array(), 'original' => TRUE);
-			$items['keywords'] = array('type' => 'textarea', 'text' => array('espanol' => 'Palabras Claves', 'english' => 'Keywords'), 'placeholder' => 'Ingrese las palabras claves de su empresa');
-			$items['description'] = array('type' => 'textarea', 'text' => array('espanol' => 'Descripción', 'english' => 'Description'), 'placeholder' => 'Ingrese la descripción de su empresa');
-			$items['email_contacto'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese el correo corporativo de su empresa');
-			$items['posicionamiento_seguimiento'] = array('type' => 'label', 'text' => array('espanol' => 'Posicionamiento y Seguimiento'));
-			$items['google_analytics'] = array('type' => 'textarea', 'text' => array('espanol' => 'Código de Seguimiento - Google Analytics'));
-
-			// Redes Sociales..
-			$items['redes_sociales'] = array('type' => 'label', 'text' => array('espanol' => 'Redes Sociales'));
-			$items['facebook'] = array('type' => 'text', 'text' => array('espanol' => 'Facebook'));
-			$items['twitter'] = array('type' => 'text', 'text' => array('espanol' => 'Twitter'));
-			$items['instagram'] = array('type' => 'text', 'text' => array('espanol' => 'Instagram'));
-			$items['youtube'] = array('type' => 'text', 'text' => array('espanol' => 'YouTube'));
-			// Fin Redes Sociales..
-		}
+		$items['redes_sociales'] = array('type' => 'label', 'text' => array('espanol' => 'Redes Sociales'));
+		$items['facebook'] = array('type' => 'text', 'text' => array('espanol' => 'Facebook'));
+		$items['twitter'] = array('type' => 'text', 'text' => array('espanol' => 'Twitter'));
+		$items['instagram'] = array('type' => 'text', 'text' => array('espanol' => 'Instagram'));
+		$items['youtube'] = array('type' => 'text', 'text' => array('espanol' => 'YouTube'));
 
 		$config['title'] = array('espanol' => 'Configuración', 'english' => 'Configuration');
 		$config['items'] = $items;

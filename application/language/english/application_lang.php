@@ -1,6 +1,6 @@
 <?php
 
-$lang['usuarios'] = "Usuarios";
+$lang['usuarios'] = "Users";
 
 /* End of file application_lang.php */
-/* Location: ./system/language/espanol/application_lang.php */
+/* Location: ./application/language/english/application_lang.php */

@@ -69,12 +69,20 @@ class MY_Controller extends CI_Controller {
 	{
 		parent::__construct();
 
-		//print_r($_SESSION[$this->session_name]); die;
-
 		// Idiomas..
 		$language = (isset($_SESSION['language'])) ? $_SESSION['language'] : 'espanol';
 
-		$directorio = dir('system/language/'.$language);
+		$directorio = dir('system/language/' . $language);
+		
+		while ($archivo = $directorio->read())
+		{
+			if($archivo != 'index.html' && $archivo != '' && $archivo != '.' && $archivo != '..')
+			{
+				$this->lang->load(str_replace('_lang.php', '', $archivo), $language);
+			}
+		}
+
+		$directorio = dir('application/language/' . $language);
 		
 		while ($archivo = $directorio->read())
 		{
@@ -93,34 +101,12 @@ class MY_Controller extends CI_Controller {
 
 		// Generando un Token de Acceso..
 		$token = $this->mostrar_session('token'); // Si es que ya existe un Token que no se ha usado..
+
 		if(empty($token))
 		{
 			$token = $this->encrypt->sha1(uniqid(rand()));
 			$this->cargar_session('token', $token);
 		}
-
-		/*
-		if(current_url() == base_url().'backend' && !isset($_GET['token']))
-		{
-			redirect('backend?token='.$token);
-		}
-
-		elseif(strpos(current_url(), 'backend'))
-		{
-			if((isset($_REQUEST['token']) && $_REQUEST['token'] == $token))
-			{
-				$token = $this->encrypt->sha1(uniqid(rand()));
-				$this->cargar_session('token', $token);
-			}
-			else
-			{
-				print_r($token);
-				print_r($this->lang->line('token_error')); die;
-			}
-		}
-		*/
-
-		// $this->descargar_session('historial');
 
 		$this->configuracion = $this->module_model->seleccionar('configuracion', array(), 1, 1);
 
@@ -782,70 +768,11 @@ class MY_Controller extends CI_Controller {
 
 		foreach($this->items as $key => $value)
 		{
-			$required = NULL;
+			$validate = (isset($value['validate']) AND $value['validate'] != '') ? $value['validate'] : NULL;
 
-			if($value['type'] != 'multiple_select' && $value['type'] != 'photo' && $value['type'] != 'file')
+			if($validate != NULL)
 			{
-				if(isset($value['required']) && $value['required'] !== NULL && $value['type'] != 'password')
-				{
-					$required = 'trim|required';
-
-					if(is_array($value['required']))
-					{
-						foreach($value['required'] as $k => $v)
-						{
-							if($v == 'is_unique')
-							{
-								if($id == NULL)
-								{
-									$required .= '|'.$v;
-									$required .= '['.$this->table.'.'.$key.']';
-								}
-							}
-							else
-							{
-								$required .= '|'.$v;
-							}
-						}
-					}
-				}
-			}
-			
-			if($value['type'] == 'photo' || $value['type'] == 'file')
-			{
-				if(isset($value['required']) && $value['required'] !== NULL)
-				{
-					if(count($busqueda) > 0)
-					{
-						if($busqueda[$key] != '' && $busqueda[$key] != NULL)
-						{
-							$required = NULL; // Si existen valores ya no es necesario el requerido.
-						}
-						else
-						{
-							if($_FILES[$key]['name'] == '')
-							{
-								$required = 'trim|required'; // Se necesita adjuntar uno nuevo.
-							}
-						}
-					}
-					else
-					{
-						if($_FILES[$key]['name'] == '')
-						{
-							$required = 'trim|required'; // Se necesita adjuntar uno nuevo.
-						}
-					}
-				}
-				else
-				{
-					$required = NULL;
-				}
-			}
-
-			if($required != NULL)
-			{
-				$config[] = array('field' => $key, 'label' => $value['text'][$this->config->item('language')], 'rules' => $required);
+				$config[] = array('field' => $key, 'label' => $value['text'][$this->config->item('language')], 'rules' => $validate);
 			}
 		}
 
@@ -1017,15 +944,15 @@ class MY_Controller extends CI_Controller {
                 	
                 	if(isset($_POST[$key.'_latitud']))
                 	{
-                		$array[$key.'_latitud'] = $this->input->post($key.'_latitud');
+                		$array[$key.'_latitud'] = $this->input->post($key . '_latitud');
                 	}
                 	if(isset($_POST[$key.'_longitud']))
                 	{
-                		$array[$key.'_longitud'] = $this->input->post($key.'_longitud');
+                		$array[$key.'_longitud'] = $this->input->post($key . '_longitud');
                 	}
                 	if(isset($_POST['estado_'.$key]))
                 	{
-                		$array['estado_'.$key] = $this->input->post('estado_'.$key);
+                		$array['estado_'.$key] = $this->input->post('estado_' . $key);
                 	}
                 }
 
@@ -1063,7 +990,6 @@ class MY_Controller extends CI_Controller {
 
 	public function clear_data()
 	{
-		# Limpiar la Información del Core.
 		$this->title[$this->config->item('language')] = NULL;
 		$this->table = NULL;
 		$this->items = array();
@@ -1075,7 +1001,6 @@ class MY_Controller extends CI_Controller {
 		$this->status = TRUE;
 		$this->campo_referencia = NULL;
 		$this->where = array();
-		// $this->elementos_adicionales = array();
 		$this->help = NULL;
 		$this->sidebar = TRUE;
 		$this->url_retorno = NULL;
@@ -1086,7 +1011,6 @@ class MY_Controller extends CI_Controller {
 		$this->item_order = array('key' => $this->parent_key, 'value' => 'ASC');
 		$this->show_order = array('key' => 'activado', 'value' => 1);
 		$this->actions = array();
-		# Fin Limpiar de la Información del Core.
 
 		return $this;
 	}
