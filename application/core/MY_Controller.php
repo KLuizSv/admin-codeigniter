@@ -2036,25 +2036,25 @@ class MY_Controller extends CI_Controller {
 		$this->actualizar($id, TRUE);
 	}
 
-	function eliminar($id = 0, $elementos_adicionales = array()) // Metodo para eliminar un registro..
+	function eliminar($id = 0) // Metodo para eliminar un registro..
 	{
 		if($this->input->is_ajax_request() === TRUE && isset($_GET) && count($_GET) > 0)
 		{
-			if(is_array($elementos_adicionales) AND count($elementos_adicionales) > 0)
+			if(is_array($this->elementos_adicionales) AND count($this->elementos_adicionales) > 0)
 			{
-				foreach($elementos_adicionales as $key => $value)
+				foreach($this->elementos_adicionales as $key => $value)
 				{
-					$busqueda = $this->module_model->seleccionar($value['table'], array('id_padre' => $id));
+					$busqueda = $this->module_model->seleccionar($value['table'], array('id_padre' => $id, 'estado' => 1));
 
 					foreach($busqueda as $k => $v)
 					{
-						$this->module_model->eliminar($value['table'], $v['id'], $value['elementos_adicionales']);
+						$this->module_model->eliminar($value['table'], $v['id']);
 						// Actualizando los valores..
-					}					
+					}
 				}
 			}
 
-			$data['mensaje'] = $this->module_model->eliminar($this->table, $id, $this->elementos_adicionales);
+			$data['mensaje'] = $this->module_model->eliminar($this->table, $id);
 			// Actualizando los valores..
 			
 			$data['url'] = $this->mostrar_session('url_retorno'); // Verificando que se quiere cerrar el formulario.
@@ -2186,7 +2186,8 @@ class MY_Controller extends CI_Controller {
 	function eliminar_masivo()
 	{
 		$data['mensaje'] = NULL;
-		if(isset($_POST))
+
+		if(isset($_POST) AND count($_POST) > 0)
 		{
 			$data['mensaje'] = "No se seleccionó ningún registro."; $data['url'] = NULL;
 			
@@ -2196,6 +2197,20 @@ class MY_Controller extends CI_Controller {
 
 				foreach($_POST['item'] as $key => $value)
 				{
+					if(is_array($this->elementos_adicionales) AND count($this->elementos_adicionales) > 0)
+					{
+						foreach($this->elementos_adicionales as $k => $v)
+						{
+							$busqueda = $this->module_model->seleccionar($v['table'], array('id_padre' => $value, 'estado' => 1));
+
+							foreach($busqueda as $i => $j)
+							{
+								$this->module_model->eliminar($v['table'], $j['id']);
+								// Actualizando los valores..
+							}
+						}
+					}
+
 					$data['mensaje'] = $this->module_model->eliminar($this->table, $value);
 				}
 
