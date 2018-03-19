@@ -756,15 +756,10 @@ class MY_Controller extends CI_Controller {
 		//return $_COOKIE[$this->session_name][$key];
 	}
 
-	protected function validar_formulario($id = NULL)
+	protected function validar_formulario($busqueda = array())
 	{
 		// Validaciones por Código..
-		$config = array(); $validacion = FALSE; $busqueda = array();
-
-		if($id != NULL)
-		{
-			$busqueda = $this->module_model->seleccionar($this->table, array('id' => $id), 1, 1);
-		}
+		$config = array(); $validacion = FALSE;
 
 		foreach($this->items as $key => $value)
 		{
@@ -772,7 +767,14 @@ class MY_Controller extends CI_Controller {
 
 			if($validate != NULL)
 			{
-				$config[] = array('field' => $key, 'label' => $value['text'][$this->config->item('language')], 'rules' => $validate);
+				if(($value['type'] == 'password' AND count($busqueda) == 0) OR ($value['type'] != 'password'))
+				{
+					if((isset($busqueda[$key]) AND $busqueda[$key] != $this->input->post($key)) OR !isset($busqueda[$key]))
+					{
+						$config[] = array('field' => $key, 'label' => $value['text'][$this->config->item('language')], 'rules' => $validate);
+					}
+				}
+					
 			}
 		}
 
@@ -1803,7 +1805,7 @@ class MY_Controller extends CI_Controller {
 			
 			if((isset($_POST) && count($_POST) > 0) || (isset($_FILES) && count($_FILES) > 0))
 			{
-				$validacion = $this->validar_formulario($id);
+				$validacion = $this->validar_formulario($dataset['values']);
 
 				if ($validacion === TRUE && $this->form_validation->run() === FALSE)
 				{

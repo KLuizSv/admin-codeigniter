@@ -67,16 +67,12 @@
                     <input type="hidden" id="retorno" name="retorno" value="" />
                     <?php $cantidad_items = 0; ?>
                     <?php foreach($items as $key => $item): ?>
-                        <?php if($cantidad_items == 0 && $item['type'] == 'label'): ?>
-                            Sistema SISCON @since <?php echo date("Y"); ?>
-                        <?php endif; ?>
-                        <?php $cantidad_items++; ?>
                         <?php if($item['type'] == 'label'): ?>
                             <?php if(isset($valor_retorno) && $valor_retorno == 1): ?>
                                 <?php if(isset($values[$parent_key]) && $values[$parent_key] <> NULL): ?>
                                     <button type="button" onclick="javascript:visualizar('<?php echo $controller; ?>', '<?php echo $values[$parent_key]; ?>');" class="btn btn-info btn-sm"><i class="fa fa-search"></i> <?php echo $this->lang->line('boton_visualizar'); ?></button>
                                 <?php endif; ?>
-                                <?php if($readonly == FALSE): ?>
+                                <?php if($solo_lectura == FALSE): ?>
                                     <?php foreach($buttons as $button): ?>
                                         <?php if($button['type'] === 'update'): ?>
                                             <button type="submit" class="btn btn-primary sin_retorno btn-sm"><i class="fa fa-save"></i> <?php echo $this->lang->line('boton_grabar'); ?></button>
@@ -111,7 +107,7 @@
                         <?php $texto = $item['text'][$this->config->item('language')]; ?>
                         <?php
 
-                            $help = (isset($item['help'])) ? ' popovers" data-original-title="Más Información" data-content="'.$item['help'].'" data-placement="bottom" data-trigger="click' : NULL;
+                            $help = (isset($item['help'])) ? TRUE : FALSE;
 
                             $class = NULL;
                             if(isset($item['class']))
@@ -132,7 +128,7 @@
                             <?php $type = $item['type']; ?>
 
                             <?php if($type !== 'hidden'): ?>
-                            	<label class="<?php echo $class; ?>" for="<?php echo $key; ?>"><?php echo $texto; ?></label><?php echo (isset($item['help'])) ? ' <span class="badge bg-info'.$help.'"> ? </span>' : NULL; ?><?php echo (isset($item['validate'])) ? ' <span class="badge bg-important"> * </span>' : NULL; ?> <?php if(isset($item['button_add']) && $item['button_add'] == TRUE && (!isset($item['readonly']) || $item['readonly'] !== TRUE)): ?><a class="btn btn-info btn-xs tooltips" data-toggle="modal" data-backdrop="static" href="#modal" style="margin-left:10px;" data-title="<?php echo $this->lang->line('agregar_registro_select'); ?>" onclick="javascript:agregar_modal('<?php echo $key; ?>', '<?php echo $item['value']['table']; ?>', '<?php echo $item['value']['key']; ?>', '<?php echo $item['value']['item']; ?>');"><i class="fa fa-plus"></i></a><?php endif; ?>
+                            	<label class="<?php echo $class; ?>" for="<?php echo $key; ?>"><?php echo $texto; ?></label><?php echo ($help === TRUE) ? ' <a href="#_help_' . $key . '" class="badge bg-info"> ? </a>' : NULL; ?><?php echo (isset($item['validate'])) ? ' <span class="badge bg-important"> * </span>' : NULL; ?> <?php if(isset($item['button_add']) && $item['button_add'] == TRUE && (!isset($item['readonly']) || $item['readonly'] !== TRUE)): ?><a class="btn btn-info btn-xs tooltips" data-toggle="modal" data-backdrop="static" href="#modal" style="margin-left:10px;" data-title="<?php echo $this->lang->line('agregar_registro_select'); ?>" onclick="javascript:agregar_modal('<?php echo $key; ?>', '<?php echo $item['value']['table']; ?>', '<?php echo $item['value']['key']; ?>', '<?php echo $item['value']['item']; ?>');"><i class="fa fa-plus"></i></a><?php endif; ?>
                             <?php endif; ?>
                             <?php
 
@@ -150,28 +146,28 @@
                                     }
                                 }
 
-                                $readonly = NULL;
+                                $solo_lectura = NULL;
 
                                 if(isset($item['readonly']) && $item['readonly'] == TRUE)
                                 {
-                                    $readonly = ' onclick="javascript:blur();"';
+                                    $solo_lectura = ' onclick="javascript:blur();"';
                                     if($type == 'select' || $type == 'multiple_select' || $type == 'date')
                                     {
-                                        $readonly .= ' disabled="disabled"';
+                                        $solo_lectura .= ' disabled="disabled"';
                                     }
                                     else
                                     {
-                                        $readonly .= ' readonly="readonly" style="cursor:default;"';
+                                        $solo_lectura .= ' readonly="readonly" style="cursor:default;"';
                                     }
                                 }
 
                             ?>
 
                             <?php if($type === 'text'): ?>
-                                <input type="text"<?php echo $readonly; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+                                <input type="text"<?php echo $solo_lectura; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
                             <?php endif; ?>
                             <?php if($type === 'youtube'): ?>
-                                <input type="text"<?php echo $readonly; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>"<?php if($value != '' && $value != NULL): ?> value="http://www.youtube.com/watch?v=<?php echo $value; ?>"<?php endif; ?> />
+                                <input type="text"<?php echo $solo_lectura; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>"<?php if($value != '' && $value != NULL): ?> value="http://www.youtube.com/watch?v=<?php echo $value; ?>"<?php endif; ?> />
                             <?php if($value != '' && $value != NULL): ?>
                                 <iframe src="http://www.youtube.com/embed/<?php echo $value; ?>" style="border:0px;width:450px;height:320px;"></iframe>
                             <?php endif; ?>
@@ -303,7 +299,7 @@
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>
-                                        <input type="text"<?php echo $readonly; ?> class="spinner-input form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>"/>
+                                        <input type="text"<?php echo $solo_lectura; ?> class="spinner-input form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>"/>
                                         <div class="spinner-buttons input-group-btn">
                                             <button type="button" class="btn spinner-down btn-warning">
                                                 <i class="fa fa-minus"></i>
@@ -314,29 +310,26 @@
                             <?php endif; ?>
                             <?php if($type === 'date'): ?>
                                 <?php $value = ($value != NULL && $value != '') ? date("d-m-Y", strtotime($value)) : date("d-m-Y"); ?>
-                                <input type="text"<?php echo $readonly; ?> class="default-date-picker form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+                                <input type="text"<?php echo $solo_lectura; ?> class="default-date-picker form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
                             <?php endif; ?>
                             <?php if($type === 'color'): ?>
-                                <input type="text"<?php echo $readonly; ?> class="colorpicker-rgba form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" data-color-format="rgba" value="<?php echo $value; ?>" />
+                                <input type="text"<?php echo $solo_lectura; ?> class="colorpicker-rgba form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" data-color-format="rgba" value="<?php echo $value; ?>" />
                             <?php endif; ?>
                             <?php if($type === 'time'): ?>
                                 <div class="input-group bootstrap-timepicker">
-                                    <input type="text"<?php echo $readonly; ?> class="form-control timepicker-24<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
+                                    <input type="text"<?php echo $solo_lectura; ?> class="form-control timepicker-24<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" value="<?php echo $value; ?>" />
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button"><i class="fa fa-clock-o"></i></button>
                                     </span>
                                 </div>
                             <?php endif; ?>
                             <?php if($type === 'password'): ?>
-                                <input type="password"<?php echo $readonly; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" />
+                                <input type="password"<?php echo $solo_lectura; ?> class="form-control<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" />
                             <?php endif; ?>
                             <?php if($type == 'textarea'): ?>
-                                <textarea<?php echo $readonly; ?> class="form-control autogrow<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>"><?php echo $value; ?></textarea>
+                                <textarea<?php echo $solo_lectura; ?> class="form-control autogrow<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>"><?php echo $value; ?></textarea>
                             <?php endif; ?>
                             <?php if($type == 'editor'): ?>
-                                <?php /* ?>
-                                <textarea<?php echo $readonly; ?> class="form-control summernote<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>"><?php echo $value; ?></textarea>
-                                <?php */ ?>
                             <?php
                                 $oFCKeditor = new FCKeditor($key);
                                 $oFCKeditor->BasePath = backend_view()."fckeditor/";
@@ -344,8 +337,6 @@
                                 {
                                     $oFCKeditor->Value = $value;
                                 }
-                                //$oFCKeditor->Config = array('readonly' => $readonly, 'enabled' => $readonly);
-                                // $oFCKeditor->Config['format'] = 'Normal';
                                 $oFCKeditor->Width = '100%';
                                 $oFCKeditor->Height = '400px';
 
@@ -359,8 +350,8 @@
                             <?php $is_array = TRUE; ?>
                             <br class="clear" />
                             <div>
-                                <select<?php echo $readonly; ?> name="<?php echo $key; ?>" id="<?php echo $key; ?>" style="width:100%" class="populate select<?php echo $class; ?>"<?php echo (isset($item['function']) && isset($item['function']['event']) && isset($item['function']['children'])) ? ' onchange="javascript:change_select(\''.$item['function']['event'].'\',\''.$controller.'\', this, \''.$item['function']['children'].'\');"' : NULL; ?>>
-                                <option value="-1">Seleccione una opci&oacute;n</option>
+                                <select<?php echo $solo_lectura; ?> name="<?php echo $key; ?>" id="<?php echo $key; ?>" style="width:100%" class="populate select<?php echo $class; ?>"<?php echo (isset($item['function']) && isset($item['function']['event']) && isset($item['function']['children'])) ? ' onchange="javascript:change_select(\''.$item['function']['event'].'\',\''.$controller.'\', this, \''.$item['function']['children'].'\');"' : NULL; ?>>
+                                <option value="">Seleccione una opci&oacute;n</option>
                                     <?php if(is_array($item['items']) && count($item['items']) > 0): ?>
                                     <?php $is_array = FALSE; ?>
                                     <?php foreach($item['items'] as $k => $v): ?>
@@ -382,7 +373,7 @@
                             <?php endif; ?>
                             <?php if($type == 'multiple_select'): ?>
                             <div>
-                                <select<?php echo $readonly; ?> multiple name="<?php echo $key ?>[]" id="<?php echo $key; ?>" style="width:100%" class="populate select<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
+                                <select<?php echo $solo_lectura; ?> multiple name="<?php echo $key ?>[]" id="<?php echo $key; ?>" style="width:100%" class="populate select<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
                                     <?php $explode = explode("-", $value); ?>
                                     <?php $selected = array(); ?>
                                     <?php foreach($explode as $k_explode => $v_explode): ?>
@@ -404,7 +395,7 @@
                             <?php $checked = ($value == 1) ? ' checked="checked"' : NULL; ?>
                             <div class="square single-row">
                                 <div class="checkbox" style="margin:0px !important;padding:0px !important;">
-                                    <input<?php echo $readonly; ?> type="checkbox" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
+                                    <input<?php echo $solo_lectura; ?> type="checkbox" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
                                 </div>
                             </div>
                             <?php endif; ?>
@@ -421,7 +412,7 @@
                                 <?php foreach($item['items'] as $k => $v): ?>
                                 <?php $checked = (isset($selected[$k])) ? ' checked="checked"' : NULL; ?>
                                 <label class="checkbox-inline" style="margin:0px !important;padding:0px !important;">
-                                    <input<?php echo $readonly; ?> type="checkbox" id="<?php echo $k; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>[]" value="<?php echo $k; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>> <?php echo $v; ?>
+                                    <input<?php echo $solo_lectura; ?> type="checkbox" id="<?php echo $k; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>[]" value="<?php echo $k; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>> <?php echo $v; ?>
                                 </label>
                                 <?php endforeach; ?>
                                 </div>
@@ -432,7 +423,7 @@
                             <?php $checked = ($value == 1) ? ' checked="checked"' : NULL; ?>
                             <div class="square single-row">
                                 <div class="radio" style="margin:0px !important;padding:0px !important;">
-                                    <input<?php echo $readonly; ?> type="radio" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
+                                    <input<?php echo $solo_lectura; ?> type="radio" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>>
                                 </div>
                             </div>
                             <?php endif; ?>
@@ -444,7 +435,7 @@
                                 <?php foreach($item['items'] as $k => $v): ?>
                                 <?php $checked = ($value == $k) ? ' checked="checked"' : NULL; ?>
                                 <label class="checkbox-inline" style="padding:5px !important;margin:0px !important;">
-                                    <input<?php echo $readonly; ?> type="radio" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" value="<?php echo $k; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>><?php echo $v; ?>
+                                    <input<?php echo $solo_lectura; ?> type="radio" id="<?php echo $key; ?>"<?php echo $checked; ?> name="<?php echo $key; ?>" value="<?php echo $k; ?>" class="<?php echo $class; ?>"<?php echo (isset($item['function'])) ? ' onchange="javascript:'.$item['function'].'(\''.$controller.'\', this);"' : NULL; ?>><?php echo $v; ?>
                                 </label>
                                 <?php endforeach; ?>
                                 </div>
@@ -463,21 +454,15 @@
                                         <span class="btn btn-white btn-file">
                                             <span class="fileupload-new"><i class="fa fa-paperclip"></i> Seleccionar Imagen</span>
                                             <span class="fileupload-exists"><i class="fa fa-undo"></i> Cambiar Imagen</span>
-                                            <input<?php echo $readonly; ?> type="file" class="default<?php echo $class; ?>" name="<?php echo $key; ?>" />
+                                            <input<?php echo $solo_lectura; ?> type="file" class="default<?php echo $class; ?>" name="<?php echo $key; ?>" />
                                         </span>
-                                        <?php if($value != NULL && $readonly == FALSE): ?>
+                                        <?php if($value != NULL && $solo_lectura == FALSE): ?>
                                             <span class="btn btn-danger" onclick="javascript:remover(this, '<?php echo $table; ?>', '<?php echo $key; ?>', '<?php echo $values[$this->parent_key]; ?>');">
                                                 <span><i class="fa fa-times"></i> Remover</span>
                                             </span>
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <?php /*
-                                <span class="label label-danger">Importante!</span>
-                                <span>
-                                El correcto funcionamiento de este visualizador de imagen dependerá de la versión del <strong>navegador</strong>.
-                                </span>
-                                */ ?>
                             <?php endif; ?>
 
                             <?php if($type == 'file'): ?>
@@ -485,10 +470,10 @@
                                     <span class="btn btn-white btn-file">
                                         <span class="fileupload-new"><i class="fa fa-paperclip"></i> Seleccionar Archivo</span>
                                         <span class="fileupload-exists"><i class="fa fa-undo"></i> Cambiar</span>
-                                        <input<?php echo $readonly; ?> type="file" class="default<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" />
+                                        <input<?php echo $solo_lectura; ?> type="file" class="default<?php echo $class; ?>" id="<?php echo $key; ?>" name="<?php echo $key; ?>" />
                                     </span>
                                     <?php if($value != NULL): ?>
-                                        <?php if($readonly == FALSE): ?>
+                                        <?php if($solo_lectura == FALSE): ?>
                                             <span class="btn btn-danger" onclick="javascript:remover(this, '<?php echo $table; ?>', '<?php echo $key; ?>', '<?php echo $values[$this->parent_key]; ?>');">
                                                 <span><i class="fa fa-times"></i> Remover</span>
                                             </span>
@@ -515,6 +500,10 @@
                                     <?php endforeach; ?>
                                 <?php endif; ?>
                                 <?php $this->load->view("backend/".$item['html'], array('data' => $item, 'key' => $key, 'values' => $new_values)); ?>
+                            <?php endif; ?>
+
+                            <?php if($help === TRUE): ?>
+                                <p id="_help_<?php echo $key; ?>" class="help-block"><span class="badge bg-info"> ? </span> <strong>Ayuda:</strong> <?php echo $item['help']; ?></p>
                             <?php endif; ?>
                         </div>
                         <?php endif; ?>

@@ -35,7 +35,7 @@ class usuarios extends MY_Controller {
 		// Fin de los Botones
 
 		// Elementos
-		$items['correo_electronico'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese su correo electrónico', 'validate' => 'required|valid_email|is_unique', 'table' => TRUE);
+		$items['correo_electronico'] = array('type' => 'text', 'text' => array('espanol' => 'Correo Electrónico', 'english' => 'Email'), 'placeholder' => 'Ingrese su correo electrónico', 'validate' => 'required|valid_email|is_unique[administrador.correo_electronico]', 'table' => TRUE);
 		$items['contrasenia'] = array('type' => 'password', 'text' => array('espanol' => 'Contraseña'), 'validate' => 'required');
 		$items['nombres'] = array('type' => 'text', 'text' => array('espanol' => 'Nombres', 'english' => 'Name'), 'placeholder' => 'Ingrese sus nombres', 'validate' => 'required', 'table' => TRUE);
 		$items['apellidos'] = array('type' => 'text', 'text' => array('espanol' => 'Apellidos', 'english' => 'Last Name'), 'placeholder' => 'Ingrese sus apellidos', 'validate' => 'required', 'table' => TRUE);

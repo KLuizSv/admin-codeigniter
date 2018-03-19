@@ -23,7 +23,7 @@ class backend_menu extends MY_Controller {
 		// Fin de los Botones
 
 		// Elementos
-		$items['metodo'] = array('type' => 'text', 'text' => array('espanol' => 'Ingrese un Método (abrir | abrir_pestania)'), 'help' => 'abrir: Ejecuta un controlador con CRUD, y abrir_pestania: Ejecuta un método dentro de controllers/backend/dashboard.php', 'validate' => 'required');
+		$items['metodo'] = array('type' => 'select', 'text' => array('espanol' => 'Ingrese un Método'), 'help' => '<i>abrir</i>: Ejecuta un controlador con CRUD (<strong>Ejemplo: application/controllers/servicios.php</strong>), y <i>abrir_pestania</i>: Ejecuta un método dentro de <strong>controllers/backend/dashboard.php</strong>', 'validate' => 'required', 'items' => array('abrir' => 'Abrir', 'abrir_pestania' => 'Abrir Pestaña'));
 		$items['url'] = array('type' => 'text', 'text' => array('espanol' => 'Ingrese una URL del Elemento'), 'table' => TRUE, 'validate' => 'required');
 		$items['icono'] = array('type' => 'group_radio', 'text' => array('espanol' => 'Icono Predeterminado del Elemento'), 'items' => $this->mostrar_iconos());
 		$items['grupo'] = array('type' => 'text', 'text' => array('espanol' => 'Nombre del Grupo'), 'table' => TRUE, 'validate' => 'required');
