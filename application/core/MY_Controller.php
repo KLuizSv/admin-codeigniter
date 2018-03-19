@@ -1124,7 +1124,7 @@ class MY_Controller extends CI_Controller {
 
 			if(isset($archivo['file_name']) && $archivo['file_name'] != '')
 			{
-				$this->borrar_archivo($this->route.$archivo_anterior);
+				$this->borrar_archivo($archivo_anterior);
 			}
         }
         else
@@ -1136,7 +1136,7 @@ class MY_Controller extends CI_Controller {
 
 	protected function borrar_archivo($ruta)
 	{
-		@unlink($this->route.$ruta);
+		@unlink($this->route . $ruta);
 	}
 
 	function obtener_informacion_archivo($archivo = FALSE)
@@ -1174,11 +1174,6 @@ class MY_Controller extends CI_Controller {
 
 	function descargar($archivo = FALSE, $nombre = FALSE)
 	{
-		/*
-		$data = file_get_contents('uploads/'.$archivo);
-		force_download($nombre, $data);
-		*/
-
 		$enlace = 'uploads/'.$archivo; $formato_tipo = explode(".", $archivo); $tipo = $formato_tipo[(count($formato_tipo) - 1 )]; $nombre = $this->limpiar_texto($nombre);
 
 		header('Content-Description: File Transfer');
@@ -1210,14 +1205,14 @@ class MY_Controller extends CI_Controller {
 
 			if(isset($info_imagen['file_name']))
 			{
-				//$this->borrar_archivo($this->route.$imagen_anterior);
+				$this->borrar_archivo($imagen_anterior);
 			}
 
 			foreach($sizes as $key => $value)
 			{
 				if(isset($info_imagen['file_name']))
 				{
-					//$this->borrar_archivo($this->route.$value.'/'.$imagen_anterior); // Borrar archivo..
+					$this->borrar_archivo($value.'/'.$imagen_anterior); // Borrar archivo..
 				}
 
 				$explode = explode("x", $value);
