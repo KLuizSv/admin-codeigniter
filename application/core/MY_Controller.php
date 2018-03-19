@@ -1198,7 +1198,7 @@ class MY_Controller extends CI_Controller {
 		$retorno = NULL;
 		
 		$config['upload_path'] = $this->route;
-        $config['allowed_types'] = 'jpg|png|gif';
+        $config['allowed_types'] = 'jpeg|jpg|png|gif';
         $config['file_name'] = time();
         $this->upload->initialize($config);
 
